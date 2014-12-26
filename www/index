@@ -1,0 +1,61 @@
+#!/usr/bin/rrdcgi
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <title>Kapitańska Stacja Meteo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <nav class="navbar navbar-static-top navbar-inverse" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#meteo-navbar-collapse">
+          <span class="sr-only">Nawigacja</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Kapitańska Stacja Meteo</a>
+      </div>
+      <div class="navbar-collapse collapse" id="meteo-navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="?duration=1d">Dzień</a>
+          <li><a href="?duration=1wk">Tydzień</a>
+          <li><a href="?duration=1mon">Miesiąc</a>
+          <li><a href="?duration=1y">Rok</a>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <p>
+    <RRD::GOODFOR -60>
+    <RRD::GRAPH graphs/temperature.png --title="Temperatura"
+      --imginfo '<img class="img-responsive" src="/graphs/temperature.png">' --start -<RRD::CV duration> --end now
+      --slope-mode
+      --height=200 --width=750
+      --vertical-label "temperatura (°C)"
+      DEF:temp=/opt/ziemianka/data.rrd:temperature:AVERAGE
+      LINE3:temp#8bbfff
+      GPRINT:temp:LAST:" Akt\: %3.1lf\j"
+      GPRINT:temp:MIN:" Min\: %3.1lf\j"
+      GPRINT:temp:MAX:" Max\: %3.1lf\j">
+    </p>
+    <p>
+    <RRD::GRAPH graphs/humidity.png --title="Wilgotność powietrza"
+      --imginfo '<img class="img-responsive" src="/graphs/humidity.png">' --start -<RRD::CV duration> --end now
+      --slope-mode
+      --height=200 --width=750
+      --vertical-label "wilgotność (%)"
+      DEF:hum=/opt/ziemianka/data.rrd:humidity:AVERAGE
+      LINE3:hum#7fb37c
+      GPRINT:hum:LAST:" Akt\: %3.1lf%%\j"
+      GPRINT:hum:MIN:" Min\: %3.1lf%%\j"
+      GPRINT:hum:MAX:" Max\: %3.1lf%%\j">
+    </p>
+  </div>
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
