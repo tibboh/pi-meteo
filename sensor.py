@@ -52,4 +52,4 @@ if __name__ == '__main__':
     print '  commands: {}'.format(', '.join(COMMANDS))
     sys.exit(1)
   else:
-    COMMANDS[sys.argv[1]](sys.argv[2:])
+    COMMANDS[sys.argv[1]](*sys.argv[2:])
