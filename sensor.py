@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import Adafruit_DHT
 import rrdtool
+import subprocess
 import sys
 
 
@@ -45,8 +46,19 @@ def do_read(*args):
   humidity, temperature = readsensor()
   print 'Temperature: {:0.1f}C, humidity={:0.1f}%'.format(temperature, humidity)
 
+def do_push(*args):
+  if len(args) != 1:
+    raise ArgumentError('Usage: push REMOTERRD')
+  host, sep, command = args[0].partition(':')
+  humidity, temperature = readsensor()
+  datastr = 'N:{:0.1f}:{:0.1f}'.format(temperature, humidity)
+  subprocess.check_call(['ssh', host, command, datastr])
+  
 if __name__ == '__main__':
-  COMMANDS = {'read': do_read, 'create': do_create, 'update': do_update}
+  COMMANDS = {
+    'read': do_read, 'create': do_create, 'update': do_update,
+    'push': do_push
+  }
   if len(sys.argv) < 2 or sys.argv[1] not in COMMANDS:
     print 'Usage: {} COMMAND OPTIONS'.format(sys.argv[0])
     print '  commands: {}'.format(', '.join(COMMANDS))
