@@ -1,0 +1,48 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <title>Kapitańska Stacja Meteo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="js/jquery.js"></script>
+  <script>
+    $(function() {
+      var duration = window.location.href.split('?', 2)[1] || '1d';
+      $("#graph-temp").attr('src', '/graphs/temp-'+duration+'.png');
+      $("#graph-hum").attr('src', '/graphs/hum-'+duration+'.png');
+    });
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-static-top navbar-inverse" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#meteo-navbar-collapse">
+          <span class="sr-only">Nawigacja</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Kapitańska Stacja Meteo</a>
+      </div>
+      <div class="navbar-collapse collapse" id="meteo-navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="?1d">Dzień</a>
+          <li><a href="?1wk">Tydzień</a>
+          <li><a href="?1mon">Miesiąc</a>
+          <li><a href="?1y">Rok</a>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <p>
+      <img class="img-responsive" src="" id="graph-temp"/>
+    </p>
+    <p>
+      <img class="img-responsive" src="" id="graph-hum"/>
+    </p>
+  </div>
+  <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
