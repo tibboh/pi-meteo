@@ -1,0 +1,23 @@
+#!/bin/bash
+DURATIONS='1d 1wk 1mon 1y'
+rrdtool update db.rrd $1
+for DURATION in $DURATIONS; do
+  rrdtool graph www/graphs/temp-${DURATION}.png --start -${DURATION} --end now \
+      --slope-mode --height 200 --width 750 \
+      --vertical-label 'temperatura (°C)' \
+      DEF:temp=db.rrd:temperature:AVERAGE \
+      LINE3:temp#8bbfff \
+      GPRINT:temp:LAST:' Akt\: %3.1lf\j' \
+      GPRINT:temp:MIN:' Min\: %3.1lf\j' \
+      GPRINT:temp:MAX:' Max\: %3.1lf\j' 2>&1 > /dev/null
+
+  rrdtool graph www/graphs/hum-${DURATION}.png --start -${DURATION} --end now \
+      --slope-mode --height 200 --width 750 \
+      --vertical-label 'wilgotność (%)' \
+      DEF:hum=db.rrd:humidity:AVERAGE \
+      LINE3:hum#7fb37c \
+      GPRINT:hum:LAST:' Akt\: %3.1lf\j' \
+      GPRINT:hum:MIN:' Min\: %3.1lf\j' \
+      GPRINT:hum:MAX:' Max\: %3.1lf\j' 2>&1 > /dev/null
+done
+echo "Push complete"
